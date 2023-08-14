@@ -64,11 +64,25 @@ class Prestamo {
 // Array para almacenar los préstamos realizados
 const prestamosRealizados = [];
 
-// Función para agregar un nuevo préstamo al array
+// Función para agregar un nuevo préstamo al array y al Local Storage
 function agregarPrestamo(monto, cuotas) {
   const prestamo = new Prestamo(monto, cuotas);
   prestamosRealizados.push(prestamo);
+  guardarPrestamosEnLocalStorage();
 }
+
+// Función para guardar los datos en el Local Storage
+function guardarPrestamosEnLocalStorage() {
+  localStorage.setItem('prestamos', JSON.stringify(prestamosRealizados));
+}
+
+// Cargar datos del Local Storage al array al cargar la página
+window.addEventListener('DOMContentLoaded', () => {
+  const prestamosLocalStorage = localStorage.getItem('prestamos');
+  if (prestamosLocalStorage) {
+    prestamosRealizados.push(...JSON.parse(prestamosLocalStorage));
+  }
+});
 
 // Función para buscar un préstamo por su monto y cuotas
 function buscarPrestamoPorMontoYCoutas(monto, cuotas) {
@@ -92,7 +106,7 @@ function calcularPagos() {
   const prestamo = new Prestamo(monto, cuotas);
   prestamo.mostrarResultados();
 
-  // Agregar el préstamo al array
+  // Agregar el préstamo al array y al Local Storage
   agregarPrestamo(monto, cuotas);
 }
 
@@ -113,7 +127,7 @@ function calcularTotal() {
   resultadosDiv.innerHTML = `<p>Monto total con envío e impuestos: $${totalConEnvioEImpuestos.toFixed(2)}</p>`;
   resultadosDiv.style.display = "block";
 
-  // Agregar el préstamo al array
+  // Agregar el préstamo al array y al Local Storage
   agregarPrestamo(monto, cuotas);
 }
 
