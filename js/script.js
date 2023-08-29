@@ -99,7 +99,11 @@ function calcularPagos() {
   const cuotas = parseInt(document.getElementById("cuotas").value);
 
   if (isNaN(monto) || isNaN(cuotas) || monto <= 0 || cuotas <= 0) {
-    alert("Ingrese un monto y número de cuotas válidos.");
+    Swal.fire({
+      icon: "error",
+      title: "Datos inválidos",
+      text: "Por favor, ingrese un monto y número de cuotas válidos.",
+    });
     return;
   }
 
@@ -115,7 +119,11 @@ function calcularTotal() {
   const cuotas = parseInt(document.getElementById("cuotas").value);
 
   if (isNaN(monto) || isNaN(cuotas) || monto <= 0 || cuotas <= 0) {
-    alert("Ingrese un monto y número de cuotas válidos.");
+    Swal.fire({
+      icon: "error",
+      title: "Datos inválidos",
+      text: "Por favor, ingrese un monto y número de cuotas válidos.",
+    });
     return;
   }
 
@@ -132,7 +140,26 @@ function calcularTotal() {
 }
 
 function limpiarResultados() {
-  const resultadosDiv = document.getElementById("resultados");
-  resultadosDiv.innerHTML = '';
-  resultadosDiv.style.display = "none";
+  Swal.fire({
+    title: "¿Estás seguro?",
+    text: "Esto eliminará los resultados actuales.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Sí, borrar",
+    cancelButtonText: "Cancelar",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const resultadosDiv = document.getElementById("resultados");
+      resultadosDiv.innerHTML = "";
+      resultadosDiv.style.display = "none";
+
+      // Limpiar los campos de entrada si es necesario
+      document.getElementById("monto").value = "";
+      document.getElementById("cuotas").value = "";
+
+      Swal.fire("Borrado", "Los resultados se han borrado.", "success");
+    }
+  });
 }
