@@ -1,3 +1,6 @@
+// Variable global para el valor del Dólar Blue
+let valordolarblue = 0;
+
 // Objeto que representa el préstamo
 class Prestamo {
   constructor(monto, cuotas) {
@@ -5,7 +8,6 @@ class Prestamo {
     this.cuotas = cuotas;
   }
 
-  // Método para obtener los intereses
   obtenerIntereses() {
     switch (this.cuotas) {
       case 3:
@@ -23,25 +25,21 @@ class Prestamo {
     }
   }
 
-  // Método para calcular el total con intereses
   calcularTotalConIntereses() {
     const intereses = this.obtenerIntereses();
-    return this.monto * (1 + intereses);
+    return this.monto * ((1 + intereses) * (valordolarblue / 700));
   }
 
-  // Método para calcular el total con intereses, envío e impuestos
   calcularTotalConEnvioEImpuestos() {
     const totalConIntereses = this.calcularTotalConIntereses();
     return totalConIntereses + 3000; // Agregamos el costo del envío
   }
 
-  // Método para calcular la cuota mensual
   calcularCuotaMensual() {
     const totalConIntereses = this.calcularTotalConIntereses();
     return totalConIntereses / this.cuotas;
   }
 
-  // Método para mostrar los resultados
   mostrarResultados() {
     const totalConIntereses = this.calcularTotalConIntereses();
     const totalConEnvioEImpuestos = this.calcularTotalConEnvioEImpuestos();
@@ -163,3 +161,23 @@ function limpiarResultados() {
     }
   });
 }
+
+// URL de la API
+const apiUrl = "https://www.dolarsi.com/api/api.php?type=valoresprincipales";
+
+// Hacer la solicitud HTTP
+fetch(apiUrl)
+  .then(response => response.json())
+  .then(data => {
+    const dolarBlue = data.find(entry => entry.casa.nombre === "Dolar Blue");
+
+    if (dolarBlue) {
+      const ventaDolarBlue = dolarBlue.casa.venta;
+      valordolarblue = parseFloat(ventaDolarBlue.replace(",", "")) / 100;
+    } else {
+      console.log("No se encontró el valor del Dolar Blue en la respuesta JSON.");
+    }
+  })
+  .catch(error => {
+    console.error("Error al hacer la solicitud HTTP:", error);
+  });
