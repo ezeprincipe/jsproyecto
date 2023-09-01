@@ -82,7 +82,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-// Función para buscar un préstamo por su monto y cuotas
+//  Función para buscar un préstamo por su monto y cuotas
 function buscarPrestamoPorMontoYCoutas(monto, cuotas) {
   return prestamosRealizados.find((prestamo) => prestamo.monto === monto && prestamo.cuotas === cuotas);
 }
